@@ -121,14 +121,17 @@ app.post("/sign-up", (req, res) => {
   users.push(user);
   res.status(201).send("ok");
 });
-
+  
 app.post("/tweets", (req, res) => {
   const tweeted = req.body;
-  if (!tweeted.username || !tweeted.tweet)
+  if (!tweeted.tweet){
     return res.status(400).send("Todos os campos são obrigatórios!");
-  const checkUser = users.find((item) => item.username === tweeted.username);
+  }
+  const user = req.headers.user
+  const checkUser = users.find((item) => item.username === user);
   if (!checkUser) return res.status(401).send("UNAUTHORIZED");
 
+  tweeted.username = user
   tweets.push(tweeted);
   res.status(201).send("OK");
 });
@@ -146,7 +149,7 @@ app.get("/tweets", (req, res) => {
     );
     addAvatarOnTweet(currentPage);
 
-    res.send(currentPage.reverse());
+    res.status(200).send(currentPage.reverse());
   } else {
     const last10Tweets = tweets.slice(-10, tweets.length);
     addAvatarOnTweet(last10Tweets);
