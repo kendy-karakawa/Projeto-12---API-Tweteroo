@@ -21,7 +21,7 @@ function addAvatarOnTweet(tweets) {
 
 app.post("/sign-up", (req, res) => {
   const user = req.body;
-  if (!user.username || !user.avatar)
+  if (!user.username || !user.avatar || typeof(user.username)!== "string" || typeof(user.avatar)!== "string"  )
     return res.status(400).send("Todos os campos são obrigatórios!");
   users.push(user);
   res.status(201).send("ok");
@@ -29,7 +29,7 @@ app.post("/sign-up", (req, res) => {
   
 app.post("/tweets", (req, res) => {
   const tweeted = req.body;
-  if (!tweeted.tweet){
+  if (!tweeted.tweet || typeof(tweeted.tweet)!== "string" ){
     return res.status(400).send("Todos os campos são obrigatórios!");
   }
   const user = req.headers.user
