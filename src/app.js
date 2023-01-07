@@ -20,6 +20,16 @@ const tweets = [
   },
 ];
 
+function addAvatarOnTweet(tweets){
+  for (let i = 0; i < tweets.length; i++) {
+    for (let j = 0; j < users.length; j++) {
+      if (tweets[i].username === users[j].username) {
+        tweets[i].avatar = users[j].avatar;
+      }
+    }
+  }
+}
+
 app.post("/sign-up", (req, res) => {
   const user = req.body;
   if (!user.username || !user.avatar)
@@ -40,15 +50,16 @@ app.post("/tweets", (req, res) => {
 
 app.get("/tweets", (req, res) => {
   const last10Tweets = tweets.slice(-10, tweets.length);
-  for (let i = 0; i < last10Tweets.length; i++) {
-    for (let j = 0; j < users.length; j++) {
-      if (last10Tweets[i].username === users[j].username) {
-        last10Tweets[i].avatar = users[j].avatar;
-      }
-    }
-  }
-
+  addAvatarOnTweet(last10Tweets)
   res.send(last10Tweets);
 });
+
+app.get("/tweets/:USERNAME", (req, res)=>{
+  const name = req.params.USERNAME
+  console.log(name)
+  const userTweets = tweets.filter(item => item.username === name)
+  addAvatarOnTweet(userTweets)
+  res.send(userTweets)
+})
 
 app.listen(5000);
