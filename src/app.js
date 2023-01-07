@@ -25,17 +25,17 @@ app.post("/sign-up", (req, res) => {
   if (!user.username || !user.avatar)
     return res.status(400).send("Todos os campos são obrigatórios!");
   users.push(user);
-  res.send("ok");
+  res.status(201).send("ok");
 });
 
 app.post("/tweets", (req, res) => {
   const tweeted = req.body;
   if(!tweeted.username || !tweeted.tweet) return res.status(400).send("Todos os campos são obrigatórios!")
   const checkUser = users.find((item) => item.username === tweeted.username);
-  if (!checkUser) return res.send("UNAUTHORIZED");
+  if (!checkUser) return res.status(401).send("UNAUTHORIZED");
 
   tweets.push(tweeted);
-  res.send("OK");
+  res.status(201).send("OK");
 });
 
 app.get("/tweets", (req, res) => {
